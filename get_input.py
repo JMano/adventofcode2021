@@ -33,3 +33,11 @@ def get_input_for_day(session, day):
         with open(input_file_path) as input_file:
             return input_file.read().split('\n')
 
+def get_test_input_for_day(day):
+    day_for_folder = get_day(day)
+    
+    directory = 'Day' + day_for_folder
+    input_file_path = directory + '/test_input.txt'
+
+    with open(input_file_path) as input_file:
+        return input_file.read().split('\n')
