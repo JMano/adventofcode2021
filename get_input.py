@@ -8,7 +8,6 @@ def get_input_for_day(session, day):
     day_for_folder = get_day(day)
     year = str(datetime.date.today().year)
 
-    # session = args.session
     with open('.session') as session_file:
         session = session_file.read()
 
