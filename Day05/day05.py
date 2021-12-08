@@ -39,27 +39,42 @@ def parse_input(input):
 
     return lines, max_x, max_y
 
-def solve_part_1(input):
+def get_overlapping_points(input, skip_diagonal = True):
     lines, max_x, max_y = parse_input(input)
     report = [[0] * (max_x + 1) for _ in range(max_y + 1)]
 
     for line in lines:
         move_x = False
         move_y = False
+        move_both = False
 
         if line.x1 != line.x2 and line.y1 != line.y2:
-            continue
-
+            move_both = True
         if line.x1 != line.x2:
             move_x = True
         else:
             move_y = True
 
-        if move_x:
+        if move_both:
+            if skip_diagonal:
+                continue
+
+            curr_x = line.x1
+            curr_y = line.y1
+
+            while curr_x != line.x2 or curr_y != line.y2:
+                report[curr_y][curr_x] += 1
+
+                curr_x += 1 if line.x1 < line.x2 else -1
+                curr_y += 1 if line.y1 < line.y2 else -1
+
+            report[curr_y][curr_x] += 1
+
+        elif move_x:
             for i in range(min(line.x1, line.x2), max(line.x1, line.x2) + 1):
                 report[line.y1][i] += 1
 
-        if move_y:
+        elif move_y:
             for i in range(min(line.y1, line.y2), max(line.y1, line.y2) + 1):
                 report[i][line.x1] += 1
 
@@ -69,10 +84,13 @@ def solve_part_1(input):
             if report[i][j] >= 2:
                 overlapping += 1
 
-    print(overlapping) # 5835
+    return overlapping
+
+def solve_part_1(input):
+   print(get_overlapping_points(input)) # 5835
 
 def solve_part_2(input):
-    print("part2")
+    print(get_overlapping_points(input, False)) # 17013
 
 if __name__ == '__main__':
     with open('Day05/test_input.txt') as input:
